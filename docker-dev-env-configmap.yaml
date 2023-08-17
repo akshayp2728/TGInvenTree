@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  INVENTREE_DB_ENGINE: postgresql
+  INVENTREE_DB_HOST: inventree-dev-db
+  INVENTREE_DB_NAME: inventree
+  INVENTREE_DB_PASSWORD: pgpassword
+  INVENTREE_DB_PORT: "5432"
+  INVENTREE_DB_USER: pguser
+  INVENTREE_DEBUG: "True"
+  INVENTREE_LOG_LEVEL: INFO
+  INVENTREE_PLUGINS_ENABLED: "True"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: inventree-dev-server-docker-dev-env
+  name: docker-dev-env

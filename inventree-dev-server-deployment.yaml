@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: inventree-dev-server
+  name: inventree-dev-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: inventree-dev-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: inventree-dev-server
+    spec:
+      containers:
+        - env:
+            - name: INVENTREE_DB_ENGINE
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_ENGINE
+                  name: docker-dev-env
+            - name: INVENTREE_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_HOST
+                  name: docker-dev-env
+            - name: INVENTREE_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_NAME
+                  name: docker-dev-env
+            - name: INVENTREE_DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_PASSWORD
+                  name: docker-dev-env
+            - name: INVENTREE_DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_PORT
+                  name: docker-dev-env
+            - name: INVENTREE_DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DB_USER
+                  name: docker-dev-env
+            - name: INVENTREE_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_DEBUG
+                  name: docker-dev-env
+            - name: INVENTREE_LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_LOG_LEVEL
+                  name: docker-dev-env
+            - name: INVENTREE_PLUGINS_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: INVENTREE_PLUGINS_ENABLED
+                  name: docker-dev-env
+          image: inventree-dev-image
+          name: inventree-dev-server
+          ports:
+            - containerPort: 8000
+          resources: {}
+          volumeMounts:
+            - mountPath: /home/inventree
+              name: inventree-dev-server-claim0
+      restartPolicy: Always
+      volumes:
+        - name: inventree-dev-server-claim0
+          persistentVolumeClaim:
+            claimName: inventree-dev-server-claim0
+status: {}

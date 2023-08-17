@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.26.0 (40646f47)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: inventree-dev-db
+  name: inventree-dev-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: inventree-dev-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yml
+        kompose.version: 1.26.0 (40646f47)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: inventree-dev-db
+    spec:
+      containers:
+        - env:
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdb
+            - name: POSTGRES_DB
+              value: inventree
+            - name: POSTGRES_PASSWORD
+              value: pgpassword
+            - name: POSTGRES_USER
+              value: pguser
+          image: postgres:13
+          name: inventree-dev-db
+          ports:
+            - containerPort: 5432
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: inventree-dev-db-claim0
+      restartPolicy: Always
+      volumes:
+        - name: inventree-dev-db-claim0
+          persistentVolumeClaim:
+            claimName: inventree-dev-db-claim0
+status: {}
